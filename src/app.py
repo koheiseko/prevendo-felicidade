@@ -49,6 +49,7 @@ data = {
 
 df = pd.DataFrame([data]).replace({'Sim': 1, 'Não': 0})
 
+
 dummy_vars = [
     'Estado que mora atualmente',
     'Área de Formação',
@@ -56,7 +57,49 @@ dummy_vars = [
     'Posição da cadeira (senioridade)',
 ]
 
-df = pd.get_dummies(df[dummy_vars]).astype(int)
+colunas_dummy = ['Estado que mora atualmente_AM', 
+       'Estado que mora atualmente_BA',
+       'Estado que mora atualmente_CE', 'Estado que mora atualmente_DF',
+       'Estado que mora atualmente_ES', 'Estado que mora atualmente_GO',
+       'Estado que mora atualmente_MA', 'Estado que mora atualmente_MG',
+       'Estado que mora atualmente_MT', 'Estado que mora atualmente_PA',
+       'Estado que mora atualmente_PB', 'Estado que mora atualmente_PE',
+       'Estado que mora atualmente_PR', 'Estado que mora atualmente_RJ',
+       'Estado que mora atualmente_RN', 'Estado que mora atualmente_RS',
+       'Estado que mora atualmente_SC', 'Estado que mora atualmente_SP',
+       'Área de Formação_Biológicas', 'Área de Formação_Exatas',
+       'Área de Formação_Humanas',
+       'Tempo que atua na área de dados_De 0 a 6 meses',
+       'Tempo que atua na área de dados_De 1 ano a 2 anos',
+       'Tempo que atua na área de dados_De 6 meses a 1 ano',
+       'Tempo que atua na área de dados_Mais de 4 anos',
+       'Tempo que atua na área de dados_Não atuo',
+       'Tempo que atua na área de dados_de 2 anos a 4 anos',
+       'Posição da cadeira (senioridade)_C-Level',
+       'Posição da cadeira (senioridade)_Coordenação',
+       'Posição da cadeira (senioridade)_Diretoria',
+       'Posição da cadeira (senioridade)_Especialista',
+       'Posição da cadeira (senioridade)_Gerência',
+       'Posição da cadeira (senioridade)_Iniciante',
+       'Posição da cadeira (senioridade)_Júnior',
+       'Posição da cadeira (senioridade)_Pleno',
+       'Posição da cadeira (senioridade)_Sênior', 'Curte games?',
+       'Curte futebol?', 'Curte livros?', 'Curte jogos de tabuleiro?',
+       'Curte jogos de fórmula 1?', 'Curte jogos de MMA?', 'Idade']
+
+num_vars = [
+    'Curte games?',
+    'Curte futebol?', 
+    'Curte livros?', 
+    'Curte jogos de tabuleiro?',
+    'Curte jogos de fórmula 1?',
+    'Curte jogos de MMA?', 
+    'Idade'
+]
+
+df_dummy = pd.get_dummies(df[dummy_vars]).astype(int)
+df_dummy[num_vars] = df[num_vars]
+df = df_dummy
 
 df_template = pd.DataFrame(columns=['Estado que mora atualmente_AM', 
        'Estado que mora atualmente_BA',
@@ -93,10 +136,10 @@ df = pd.concat([df_template, df]).fillna(0)
 proba = float(model['model'].predict_proba(df[colunas_dummy])[:,1][0])
 
 if proba > 0.7:
-    st.success(f'Voce é uma pessoa feliz! probabilidade: {proba}')
+    st.success(f'#### Voce é uma pessoa feliz! Probabilidade: {100 * proba:.0f}%')
 
 elif proba > 0.7:
-    st.warning(f'Voce é uma pessoa meio feliz! probabilidade: {proba}')
+    st.warning(f'#### Voce é uma pessoa meio feliz! Probabilidade: {100 * proba:.0f}%')
 
-elif proba > 0.4:
-    st.error(f'Voce é uma pessoa feliz! probabilidade: {proba}')
+else:
+    st.error(f'#### Voce é uma pessoa nada feliz! Probabilidade: {100 * proba:.0f}%')
