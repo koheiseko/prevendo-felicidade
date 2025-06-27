@@ -27,6 +27,11 @@ dummy_vars = [
 ]
 
 df_processed = pd.get_dummies(df[dummy_vars]).astype(int)
+
+df_processed.columns
+
+# %%
+
 df_processed[num_vars] = df[num_vars].copy()
 
 df_processed['Pessoa feliz'] = df['Você se considera uma pessoa feliz?'].copy()
@@ -35,3 +40,4 @@ df_processed.head()
 
 df_processed.to_csv('../data/processed/dados_processados.csv', index=False)
 
+# %%
