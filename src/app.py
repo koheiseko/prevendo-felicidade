@@ -138,7 +138,7 @@ proba = float(model['model'].predict_proba(df[colunas_dummy])[:,1][0])
 if proba > 0.7:
     st.success(f'#### Voce é uma pessoa feliz! Probabilidade: {100 * proba:.0f}%')
 
-elif proba > 0.7:
+elif proba > 0.5:
     st.warning(f'#### Voce é uma pessoa meio feliz! Probabilidade: {100 * proba:.0f}%')
 
 else:
